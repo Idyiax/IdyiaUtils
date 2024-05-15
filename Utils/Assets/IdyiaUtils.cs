@@ -6,191 +6,102 @@ namespace IdyiaUtilities
 {
     public static class Animate
     {
-        #region Animators
-        // Used to dynamically update a given reference value from within a coroutine. 
-        private class ValueWrapper<T> { public T Value; }
+        private delegate T InterpolationDelegate<T>(T startValue, T endValue, float t);
         /// <summary>
-        /// Animates a float from its current value to a given value.
+        /// Animates a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
         /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="value"> The value (by reference) to animate. </param>
-        /// <param name="endValue"> The target value of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
+        /// <param name="startValue"> The starting value of the animation. </param>
+        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that receives the output value. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. (optional) </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. (optional) </param>
         /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue(this MonoBehaviour behaviour, float duration, ref float value, float endValue, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1) where T : struct
         {
-            ValueWrapper<float> wrapper = new ValueWrapper<float> { Value = value };
-            return behaviour.StartCoroutine(AnimationValue(duration, wrapper, endValue, easingMode, easingFactor));
+            InterpolationDelegate<T> interpolate;
+            switch (typeof(T))
+            {
+                case Type t when t == typeof(int):
+                    interpolate = (startValue, endValue, t) => (T)(object)Mathf.RoundToInt(Mathf.Lerp((int)(object)startValue, (int)(object)endValue, t));
+                    break;
+                case Type t when t == typeof(float):
+                    interpolate = (startValue, endValue, t) => (T)(object)Mathf.Lerp((float)(object)startValue, (float)(object)endValue, t);
+                    break;
+                case Type t when t == typeof(Vector2):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector2.Lerp((Vector2)(object)startValue, (Vector2)(object)endValue, t);
+                    break;
+                case Type t when t == typeof(Vector2Int):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector2Int.RoundToInt(Vector2.Lerp((Vector2Int)(object)startValue, (Vector2Int)(object)endValue, t));
+                    break;
+                case Type t when t == typeof(Vector3):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector3.Lerp((Vector3)(object)startValue, (Vector3)(object)endValue, t);
+                    break;
+                case Type t when t == typeof(Vector3Int):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector3Int.RoundToInt(Vector3.Lerp((Vector3Int)(object)startValue, (Vector3Int)(object)endValue, t));
+                    break;
+                case Type t when t == typeof(Color):
+                    interpolate = (startValue, endValue, t) => (T)(object)Color.Lerp((Color)(object)startValue, (Color)(object)endValue, t);
+                    break;
+                case Type t when t == typeof(Quaternion):
+                    interpolate = (startValue, endValue, t) => (T)(object)Quaternion.Lerp((Quaternion)(object)startValue, (Quaternion)(object)endValue, t);
+                    break;
+                default:
+                    throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
+            }
+
+            return behaviour.StartCoroutine(Animation<T>(duration, startValue, endValue, onUpdate, easingMode, easingFactor, interpolate));
         }
-        private static IEnumerator AnimationValue(float duration, ValueWrapper<float> wrapper, float endValue, EasingMode easingMode, float easingFactor)
+        /// <summary>
+        /// Animates a rotation from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How long the animation will take. </param>
+        /// <param name="startRotation"> The starting value of the animation. </param>
+        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that receives the output value. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. (optional) </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. (optional) </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1) where T : struct
+        {
+            InterpolationDelegate<T> interpolate;
+            switch (typeof(T))
+            {
+                case Type t when t == typeof(Vector3):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector3.Slerp((Vector3)(object)startValue, (Vector3)(object)endValue, t);
+                    break;
+                case Type t when t == typeof(Vector3Int):
+                    interpolate = (startValue, endValue, t) => (T)(object)Vector3Int.RoundToInt(Vector3.Slerp((Vector3Int)(object)startValue, (Vector3Int)(object)endValue, t));
+                    break;
+                case Type t when t == typeof(Quaternion):
+                    interpolate = (startValue, endValue, t) => (T)(object)Quaternion.Slerp((Quaternion)(object)startValue, (Quaternion)(object)endValue, t);
+                    break;
+                default:
+                    throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
+            }
+
+            return behaviour.StartCoroutine(Animation<T>(duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, interpolate));
+        }
+
+        private static IEnumerator Animation<T>(float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, InterpolationDelegate<T> interpolate) where T : struct
         {
             float timeElapsed = 0f;
-            float startValue = wrapper.Value;
-
             float timeMultiplier = 1 / duration;
 
             while (timeElapsed < duration)
             {
                 float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                wrapper.Value = Mathf.Lerp(startValue, endValue, easedProgress);
+                onUpdate(interpolate(startValue, endValue, easedProgress));
+
                 timeElapsed += Time.deltaTime;
                 yield return null;
             }
 
-            wrapper.Value = endValue;
+            onUpdate(endValue);
         }
-        /// <summary>
-        /// Animates this behaviour's transform from its current position to a given position.
-        /// </summary>
-        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="endPosition"> The target position of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimatePosition(this MonoBehaviour behaviour, float duration, Vector3 endPosition, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            return behaviour.StartCoroutine(AnimationPosition(behaviour, duration, endPosition, easingMode, easingFactor));
-        }
-        private static IEnumerator AnimationPosition(MonoBehaviour behaviour, float duration, Vector3 endPosition, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            float timeElapsed = 0f;
-            Vector3 startPosition = behaviour.transform.position;
 
-            float timeMultiplier = 1 / duration;
-
-            while (timeElapsed < duration)
-            {
-                float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                behaviour.transform.position = Vector3.Lerp(startPosition, endPosition, easedProgress);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            behaviour.transform.position = endPosition;
-        }
-        /// <summary>
-        /// Animates this behaviour's transform from its current local position to a given local position.
-        /// </summary>
-        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="endPosition"> The target local position of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateLocalPosition(this MonoBehaviour behaviour, float duration, Vector3 endPosition, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            return behaviour.StartCoroutine(AnimationLocalPosition(behaviour, duration, endPosition, easingMode, easingFactor));
-        }
-        private static IEnumerator AnimationLocalPosition(MonoBehaviour behaviour, float duration, Vector3 endPosition, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            float timeElapsed = 0f;
-            Vector3 startPosition = behaviour.transform.localPosition;
-
-            float timeMultiplier = 1 / duration;
-
-            while (timeElapsed < duration)
-            {
-                float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                behaviour.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            behaviour.transform.localPosition = endPosition;
-        }
-        /// <summary>
-        /// Animates this behaviour's transform from its current rotation to a given rotation.
-        /// </summary>
-        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="endRotation"> The target rotation of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation(this MonoBehaviour behaviour, float duration, Quaternion endRotation, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            return behaviour.StartCoroutine(AnimationRotation(behaviour, duration, endRotation, easingMode, easingFactor));
-        }
-        private static IEnumerator AnimationRotation(MonoBehaviour behaviour, float duration, Quaternion endRotation, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            float timeElapsed = 0f;
-            Quaternion startRotation = behaviour.transform.rotation;
-
-            float timeMultiplier = 1 / duration;
-
-            while (timeElapsed < duration)
-            {
-                float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                behaviour.transform.rotation = Quaternion.Slerp(startRotation, endRotation, easedProgress);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            behaviour.transform.rotation = endRotation;
-        }
-        /// <summary>
-        /// Animates this behaviour's transform from its current local rotation to a given local rotation.
-        /// </summary>
-        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="endRotation"> The target local rotation of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateLocalRotation(this MonoBehaviour behaviour, float duration, Quaternion endRotation, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            return behaviour.StartCoroutine(AnimationLocalRotation(behaviour, duration, endRotation, easingMode, easingFactor));
-        }
-        private static IEnumerator AnimationLocalRotation(MonoBehaviour behaviour, float duration, Quaternion endRotation, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            float timeElapsed = 0f;
-            Quaternion startRotation = behaviour.transform.localRotation;
-
-            float timeMultiplier = 1 / duration;
-
-            while (timeElapsed < duration)
-            {
-                float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                behaviour.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, easedProgress);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            behaviour.transform.localRotation = endRotation;
-        }
-        /// <summary>
-        /// Animates this behaviour's transform from its current local scale to a given local scale.
-        /// </summary>
-        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
-        /// <param name="endScale"> The target local scale of the animation. </param>
-        /// <param name="easingMode"> The type of easing to be aplied to the animation. (optional) </param>
-        /// <param name="easingFactor"> The strength of the easing to be aplied to the animation. (optional) </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateLocalScale(this MonoBehaviour behaviour, float duration, Vector3 endScale, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            return behaviour.StartCoroutine(AnimationLocalScale(behaviour, duration, endScale, easingMode, easingFactor));
-        }
-        private static IEnumerator AnimationLocalScale(MonoBehaviour behaviour, float duration, Vector3 endScale, EasingMode easingMode = EasingMode.Linear, float easingFactor = 1)
-        {
-            float timeElapsed = 0f;
-            Vector3 startScale = behaviour.transform.localScale;
-
-            float timeMultiplier = 1 / duration;
-
-            while (timeElapsed < duration)
-            {
-                float easedProgress = Ease(easingMode, easingFactor, timeElapsed * timeMultiplier);
-                behaviour.transform.localScale = Vector3.Lerp(startScale, endScale, easedProgress);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            behaviour.transform.localScale = endScale;
-        }
         // Returns an eased version of a value.
         private static float Ease(EasingMode mode, float easingFactor, float t)
         {
@@ -221,6 +132,5 @@ namespace IdyiaUtilities
             EaseOut,
             EaseInOut
         }
-        #endregion Animators
     }
 }
