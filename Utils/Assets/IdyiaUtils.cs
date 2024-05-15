@@ -11,10 +11,10 @@ namespace IdyiaUtilities
         /// Animates a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
         /// <param name="startValue"> The starting value of the animation. </param>
         /// <param name="endValue"> The ending value of the animation. </param>
-        /// <param name="onUpdate"> The delegate that receives the output value. </param>
+        /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
         /// <param name="easingMode"> The type of easing to be applied to the animation. (optional) </param>
         /// <param name="easingFactor"> The strength of the easing to be applied to the animation. (optional) </param>
         /// <returns> The coroutine of this animation. </returns>
@@ -57,10 +57,10 @@ namespace IdyiaUtilities
         /// Animates a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How long the animation will take. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
         /// <param name="startRotation"> The starting value of the animation. </param>
         /// <param name="endRotation"> The ending value of the animation. </param>
-        /// <param name="onUpdate"> The delegate that receives the output value. </param>
+        /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
         /// <param name="easingMode"> The type of easing to be applied to the animation. (optional) </param>
         /// <param name="easingFactor"> The strength of the easing to be applied to the animation. (optional) </param>
         /// <returns> The coroutine of this animation. </returns>
