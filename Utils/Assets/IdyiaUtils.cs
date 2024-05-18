@@ -8,6 +8,7 @@ namespace IdyiaUtilities
     {
         private delegate T InterpolationDelegate<T>(T startValue, T endValue, float t);
 
+        #region Animate Value Overloads
         /// <summary>
         /// Animates a value from a given start value to a given end value.
         /// </summary>
@@ -17,8 +18,20 @@ namespace IdyiaUtilities
         /// <param name="endValue"> The ending value of the animation. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
         /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate) where T : struct => 
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1);
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate) where T : struct =>
+            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, null);
+        /// <summary>
+        /// Animates a value from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startValue"> The starting value of the animation. </param>
+        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, Action onComplete) where T : struct => 
+            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
         /// Animates a value from a given start value to a given end value.
         /// </summary>
@@ -30,7 +43,32 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
         /// <returns> The coroutine of this animation. </returns>
         public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1);
+            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, null);
+        /// <summary>
+        /// Animates a value from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startValue"> The starting value of the animation. </param>
+        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
+            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, onComplete);
+        /// <summary>
+        /// Animates a value from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startValue"> The starting value of the animation. </param>
+        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
+            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, easingFactor, null);
         /// <summary>
         /// Animates a value from a given start value to a given end value.
         /// </summary>
@@ -41,8 +79,9 @@ namespace IdyiaUtilities
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
         /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
         /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
         /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct
+        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
         {
             InterpolationDelegate<T> interpolate;
             switch (typeof(T))
@@ -75,9 +114,11 @@ namespace IdyiaUtilities
                     throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
             }
 
-            return behaviour.StartCoroutine(Animation<T>(duration, startValue, endValue, onUpdate, easingMode, easingFactor, interpolate));
+            return behaviour.StartCoroutine(Animation<T>(duration, startValue, endValue, onUpdate, easingMode, easingFactor, interpolate, onComplete));
         }
-        
+        #endregion Animate Value Overloads
+
+        #region Animate Rotation Overloads
         /// <summary>
         /// Animates a rotation from a given start value to a given end value.
         /// </summary>
@@ -88,7 +129,19 @@ namespace IdyiaUtilities
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
         /// <returns> The coroutine of this animation. </returns>
         public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1);
+            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, null);
+        /// <summary>
+        /// Animates a rotation from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startRotation"> The starting value of the animation. </param>
+        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, Action onComplete) where T : struct =>
+            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
         /// Animates a rotation from a given start value to a given end value.
         /// </summary>
@@ -100,7 +153,20 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
         /// <returns> The coroutine of this animation. </returns>
         public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1);
+            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, null);
+        /// <summary>
+        /// Animates a rotation from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startRotation"> The starting value of the animation. </param>
+        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
+            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, onComplete);
         /// <summary>
         /// Animates a rotation from a given start value to a given end value.
         /// </summary>
@@ -112,7 +178,21 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
         /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
         /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct
+        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
+            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, null);
+        /// <summary>
+        /// Animates a rotation from a given start value to a given end value.
+        /// </summary>
+        /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
+        /// <param name="duration"> How many seconds the animation will take. </param>
+        /// <param name="startRotation"> The starting value of the animation. </param>
+        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
+        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
+        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
+        /// <returns> The coroutine of this animation. </returns>
+        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
         {
             InterpolationDelegate<T> interpolate;
             switch (typeof(T))
@@ -130,10 +210,11 @@ namespace IdyiaUtilities
                     throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
             }
 
-            return behaviour.StartCoroutine(Animation<T>(duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, interpolate));
+            return behaviour.StartCoroutine(Animation<T>(duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, interpolate, onComplete));
         }
+        #endregion Animate Rotation Overloads
 
-        private static IEnumerator Animation<T>(float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, InterpolationDelegate<T> interpolate) where T : struct
+        private static IEnumerator Animation<T>(float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, InterpolationDelegate<T> interpolate, Action onComplete = null) where T : struct
         {
             float timeElapsed = 0f;
             float timeMultiplier = 1 / duration;
@@ -148,6 +229,7 @@ namespace IdyiaUtilities
             }
 
             onUpdate(endValue);
+            if(onComplete != null) onComplete();
         }
 
         /// <summary>
