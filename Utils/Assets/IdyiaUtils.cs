@@ -4,84 +4,84 @@ using UnityEngine;
 
 namespace IdyiaUtilities
 {
-    public static class Animate
+    public static class Tween
     {
         private delegate T InterpolationDelegate<T>(T startValue, T endValue, float t);
 
-        #region Animate Value Overloads
+        #region Tween Value Overloads
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate) where T : struct =>
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, null);
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate) where T : struct =>
+            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, null);
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, Action onComplete) where T : struct => 
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, onComplete);
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, Action onComplete) where T : struct =>
+            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, null);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
+            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, null);
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, onComplete);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
+            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, onComplete);
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
-            AnimateValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, easingFactor, null);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
+            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, easingFactor, null);
         /// <summary>
-        /// Animates a value from a given start value to a given end value.
+        /// Tweens a value from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startValue"> The starting value of the animation. </param>
-        /// <param name="endValue"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startValue"> The starting value of the tween. </param>
+        /// <param name="endValue"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the tween. </param>
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenValue<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
         {
             InterpolationDelegate<T> interpolate;
             switch (typeof(T))
@@ -114,85 +114,85 @@ namespace IdyiaUtilities
                     throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
             }
 
-            return behaviour.StartCoroutine(Animation<T>(duration, startValue, endValue, onUpdate, easingMode, easingFactor, interpolate, onComplete));
+            return behaviour.StartCoroutine(TweenAnimation<T>(duration, startValue, endValue, onUpdate, easingMode, easingFactor, interpolate, onComplete));
         }
-        #endregion Animate Value Overloads
+        #endregion Tween Value Overloads
 
-        #region Animate Rotation Overloads
+        #region Tween Rotation Overloads
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, null);
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate) where T : struct =>
+            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, null);
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, Action onComplete) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, onComplete);
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, Action onComplete) where T : struct =>
+            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, null);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
+            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, null);
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, onComplete);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
+            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, onComplete);
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
-            AnimateRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, null);
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the tween. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
+            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, null);
         /// <summary>
-        /// Animates a rotation from a given start value to a given end value.
+        /// Tweens a rotation from a given start value to a given end value.
         /// </summary>
         /// <param name="behaviour"> The MonoBehaviour the coroutine is run on. </param>
-        /// <param name="duration"> How many seconds the animation will take. </param>
-        /// <param name="startRotation"> The starting value of the animation. </param>
-        /// <param name="endRotation"> The ending value of the animation. </param>
+        /// <param name="duration"> How many seconds the tween will take. </param>
+        /// <param name="startRotation"> The starting value of the tween. </param>
+        /// <param name="endRotation"> The ending value of the tween. </param>
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
-        /// <param name="easingMode"> The type of easing to be applied to the animation. </param>
-        /// <param name="easingFactor"> The strength of the easing to be applied to the animation. </param>
-        /// <param name="onComplete"> The delegate that's run after the animation is complete. </param>
-        /// <returns> The coroutine of this animation. </returns>
-        public static Coroutine AnimateRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
+        /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
+        /// <param name="easingFactor"> The strength of the easing to be applied to the tween. </param>
+        /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
+        /// <returns> The coroutine of this tween. </returns>
+        public static Coroutine TweenRotation<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor, Action onComplete) where T : struct
         {
             InterpolationDelegate<T> interpolate;
             switch (typeof(T))
@@ -210,11 +210,11 @@ namespace IdyiaUtilities
                     throw new NotImplementedException($"Type {typeof(T).Name} is not supported.");
             }
 
-            return behaviour.StartCoroutine(Animation<T>(duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, interpolate, onComplete));
+            return behaviour.StartCoroutine(TweenAnimation<T>(duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, interpolate, onComplete));
         }
-        #endregion Animate Rotation Overloads
+        #endregion Tween Rotation Overloads
 
-        private static IEnumerator Animation<T>(float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, InterpolationDelegate<T> interpolate, Action onComplete = null) where T : struct
+        private static IEnumerator TweenAnimation<T>(float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor, InterpolationDelegate<T> interpolate, Action onComplete = null) where T : struct
         {
             float timeElapsed = 0f;
             float timeMultiplier = 1 / duration;
@@ -255,7 +255,7 @@ namespace IdyiaUtilities
             }
         }
         /// <summary>
-        /// The easing mode used for an animation.
+        /// The easing mode used for an tweens.
         /// </summary>
         public enum EasingMode
         {
