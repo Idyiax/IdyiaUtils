@@ -128,7 +128,7 @@ namespace IdyiaUtilities
         /// <param name="onUpdate"> The delegate that's given the current value each time it's updated. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenValueRealtime<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate) where T : struct =>
-            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, null);
+            TweenValueRealtime<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, null);
         /// <summary>
         /// Tweens a value from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -140,7 +140,7 @@ namespace IdyiaUtilities
         /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenValueRealtime<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, Action onComplete) where T : struct =>
-            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, onComplete);
+            TweenValueRealtime<T>(behaviour, duration, startValue, endValue, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
         /// Tweens a value from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -152,7 +152,7 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenValueRealtime<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, null);
+            TweenValueRealtime<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, null);
         /// <summary>
         /// Tweens a value from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -165,7 +165,7 @@ namespace IdyiaUtilities
         /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenValueRealtime<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
-            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, onComplete);
+            TweenValueRealtime<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, 1, onComplete);
         /// <summary>
         /// Tweens a value from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -177,7 +177,7 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenValueRealtime<T>(this MonoBehaviour behaviour, float duration, T startValue, T endValue, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
-            TweenValue<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, easingFactor, null);
+            TweenValueRealtime<T>(behaviour, duration, startValue, endValue, onUpdate, easingMode, easingFactor, null);
         /// <summary>
         /// Tweens a value from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -333,7 +333,7 @@ namespace IdyiaUtilities
         /// <param name="onUpdate"> The delegate that's given the current rotation each time it's updated. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenRotationRealtime<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate) where T : struct =>
-            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, null);
+            TweenRotationRealtime<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, null);
         /// <summary>
         /// Tweens a rotation from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -345,7 +345,7 @@ namespace IdyiaUtilities
         /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenRotationRealtime<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, Action onComplete) where T : struct =>
-            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, onComplete);
+            TweenRotationRealtime<T>(behaviour, duration, startRotation, endRotation, onUpdate, EasingMode.Linear, 1, onComplete);
         /// <summary>
         /// Tweens a rotation from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -357,7 +357,7 @@ namespace IdyiaUtilities
         /// <param name="easingMode"> The type of easing to be applied to the tween. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenRotationRealtime<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode) where T : struct =>
-            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, null);
+            TweenRotationRealtime<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, null);
         /// <summary>
         /// Tweens a rotation from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -370,7 +370,7 @@ namespace IdyiaUtilities
         /// <param name="onComplete"> The delegate that's run after the tween is complete. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenRotationRealtime<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, Action onComplete) where T : struct =>
-            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, onComplete);
+            TweenRotationRealtime<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, 1, onComplete);
         /// <summary>
         /// Tweens a rotation from a given start value to a given end value time-scale independently.
         /// </summary>
@@ -383,7 +383,7 @@ namespace IdyiaUtilities
         /// <param name="easingFactor"> The strength of the easing to be applied to the tween. </param>
         /// <returns> The coroutine of this tween. </returns>
         public static Coroutine TweenRotationRealtime<T>(this MonoBehaviour behaviour, float duration, T startRotation, T endRotation, Action<T> onUpdate, EasingMode easingMode, float easingFactor) where T : struct =>
-            TweenRotation<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, null);
+            TweenRotationRealtime<T>(behaviour, duration, startRotation, endRotation, onUpdate, easingMode, easingFactor, null);
         /// <summary>
         /// Tweens a rotation from a given start value to a given end value time-scale independently.
         /// </summary>
